@@ -1,0 +1,27 @@
+# Version: 0.0.2
+
+FROM python:3.8.5
+
+MAINTAINER Vyacheslav Beketov <beketov-70@bk.ru>
+
+ENV SECRET_KEY $SECRET_KEY
+ENV DEBUG $DEBUG
+ENV SQLALCHEMY_DATABASE_URI $SQLALCHEMY_DATABASE_URI
+ENV SQLALCHEMY_TRACK_MODIFICATIONS $SQLALCHEMY_TRACK_MODIFICATIONS
+ENV SALT $SALT
+ENV JSON_AS_ASCII $JSON_AS_ASCII
+
+# Dockerfile в той же директории, где и flask-приложение
+# копируем приложение в папку контейнера
+COPY ./HW.Docker.Flask2 /app
+
+# Запустить команду внутри образа, установка зависимостей.
+# файлы приложения уже в папке /app
+# выполняет команду и создаёт слой образа. Используется для установки в контейнер пакетов.
+RUN pip install -r /app/requirements.txt
+
+#запускаем приложение (CMD - выполнить команду внутри контейнера, аргументы конкатенируются через пробел
+CMD ["python", "/app/run.py"]
+
+
+
